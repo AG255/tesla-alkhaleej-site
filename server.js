@@ -13,11 +13,16 @@ const admins = [
   "ghdawyly28@gmail.com",
   "ahmedghadawi@gmail.com"
 ];
-const { email } = req.body;
-  res.json({ success: admins.includes(email) });
+
+app.post("/api/admin-login", (req, res) => {
+  const email = (req.body.email || "").trim().toLowerCase();
+
+  const allowedAdmins = admins.map(e => e.trim().toLowerCase());
+
+  res.json({ success: allowedAdmins.includes(email) });
 });
 
-app.post("/api/parts", (req, res) => {
+
   const part = {
     id: Date.now(),
     brand: req.body.brand,
