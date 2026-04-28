@@ -10,12 +10,10 @@ app.use(express.static(__dirname));
 let parts = [];
 
 const admins = [
-  "ghdawyly28@ghail.com",
-  "ahmed@example.com"
+  "ghdawyly28@gmail.com",
+  "ahmedghadawi@gmail.com"
 ];
-
-app.post("/api/admin-login", (req, res) => {
-  const { email } = req.body;
+const { email } = req.body;
   res.json({ success: admins.includes(email) });
 });
 
