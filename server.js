@@ -7,25 +7,58 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(__dirname));
 
-// 👇 الأدمن
+let parts = [];
+
 const admins = [
   "ghdawyly28@gmail.com",
   "ahmedghadawi@gmail.com"
 ];
 
-// 👇 تسجيل دخول الأدمن
 app.post("/api/admin-login", (req, res) => {
   const email = (req.body.email || "").trim().toLowerCase();
   const allowedAdmins = admins.map(e => e.trim().toLowerCase());
-
-  if (allowedAdmins.includes(email)) {
-    res.json({ success: true });
-  } else {
-    res.json({ success: false });
-  }
+  res.json({ success: allowedAdmins.includes(email) });
 });
 
-// 👇 تشغيل السيرفر
+app.post("/api/parts", (req, res) => {
+  const part = {
+    id: Date.now(),
+    brand: req.body.brand,
+    code: req.body.code,
+    name: req.body.name,
+    car: req.body.car,
+    model: req.body.model,
+    price: req.body.price,
+    nasim: Number(req.body.nasim || 0),
+    khaleej: Number(req.body.khaleej || 0),
+    dammam1: Number(req.body.dammam1 || 0),
+    dammam2: Number(req.body.dammam2 || 0)
+  };
+
+  parts.push(part);
+
+  res.json({
+    success: true,
+    message: `تمت إضافة القطعة: ${part.name} | الكود: ${part.code}`,
+    part
+  });
+});
+
+app.get("/api/search", (req, res) => {
+  const q = (req.query.q || "").trim().toLowerCase();
+  const brand = (req.query.brand || "").trim();
+
+  const result = parts.filter(p =>
+    p.brand === brand &&
+    (
+      p.code.toLowerCase().includes(q) ||
+      p.name.toLowerCase().includes(q)
+    )
+  );
+
+  res.json(result);
+});
+
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
