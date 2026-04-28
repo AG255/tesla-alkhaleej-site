@@ -1,12 +1,13 @@
 let isAdmin = false;
 let selectedAdminBrand = "";
 
+// تسجيل الدخول
 async function loginAdmin() {
-  const email = document.getElementById("adminEmail").value.trim();
+  const email = document.getElementById("adminEmail").value;
 
   const res = await fetch("/api/admin-login", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type":"application/json"},
     body: JSON.stringify({ email })
   });
 
@@ -16,57 +17,66 @@ async function loginAdmin() {
     isAdmin = true;
     document.getElementById("loginBox").classList.add("hidden");
     document.getElementById("adminPanel").classList.remove("hidden");
+
+    loadParts();
   } else {
-    document.getElementById("loginMsg").innerText = "الإيميل غير مصرح له";
+    document.getElementById("loginMsg").innerText = "❌ الإيميل غير مصرح";
   }
 }
 
+// اختيار الشركة
 function setBrand(brand) {
   selectedAdminBrand = brand;
   document.getElementById("selectedBrandText").innerText = `تم اختيار: ${brand}`;
 }
 
+// إضافة قطعة
 async function addPart() {
-  if (!isAdmin) return;
-
   if (!selectedAdminBrand) {
-    alert("اختر هيونداي أو كيا أولاً");
+    alert("اختر الشركة أولاً");
     return;
   }
 
   const part = {
     brand: selectedAdminBrand,
-    code: document.getElementById("code").value.trim(),
-    name: document.getElementById("name").value.trim(),
-    car: document.getElementById("car").value.trim(),
-    model: document.getElementById("model").value.trim(),
-    price: document.getElementById("price").value.trim(),
-    nasim: Number(document.getElementById("nasim").value || 0),
-    khaleej: Number(document.getElementById("khaleej").value || 0),
-    dammam1: Number(document.getElementById("dammam1").value || 0),
-    dammam2: Number(document.getElementById("dammam2").value || 0)
+    code: code.value,
+    name: name.value,
+    car: car.value,
+    model: model.value,
+    price: price.value,
+    nasim: Number(nasim.value || 0),
+    khaleej: Number(khaleej.value || 0),
+    dammam1: Number(dammam1.value || 0),
+    dammam2: Number(dammam2.value || 0)
   };
-
-  if (!part.code || !part.name) {
-    alert("اكتب كود القطعة واسم القطعة");
-    return;
-  }
 
   const res = await fetch("/api/parts", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type":"application/json"},
     body: JSON.stringify(part)
   });
 
   const data = await res.json();
+  addMsg.innerText = data.message;
 
-  if (data.success) {
-    document.getElementById("addMsg").innerText =
-  `✅ تمت إضافة القطعة: ${part.name}
-الكود: ${part.code}
-الشركة: ${part.brand}
-النسيم: ${part.nasim}
-الخليج: ${part.khaleej}
-الخضرية 1: ${part.dammam1}
-الخضرية 2: ${part.dammam2}`;
+  loadParts();
+}
+
+// تحميل القطع
+async function loadParts() {
+  const res = await fetch("/api/parts");
+  const data = await res.json();
+
+  partsList.innerHTML = data.map(p => `
+    <div style="margin:10px;padding:10px;background:#eee;color:black">
+      ${p.name} (${p.code})
+      <button onclick="deletePart(${p.id})">🗑️ حذف</button>
+    </div>
+  `).join("");
+}
+
+// حذف
+async function deletePart(id) {
+  await fetch("/api/parts/" + id, { method: "DELETE" });
+  loadParts();
 }
