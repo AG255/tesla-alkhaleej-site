@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة الأدمن</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <img src="assets/logo.png" class="main-logo">
+  <div>
+    <h1>لوحة إدارة المخزون</h1>
+    <p>إضافة وتحديث قطع الغيار</p>
+  </div>
+  <a href="index.html" class="admin-link">رجوع للموقع</a>
+</header>
+
+<section class="card" id="loginBox">
+  <h2>دخول الأدمن</h2>
+  <input id="adminEmail" placeholder="اكتب إيميل الأدمن">
+  <button onclick="loginAdmin()">دخول</button>
+  <p id="loginMsg"></p>
+</section>
+
+<section class="card hidden" id="adminPanel">
+  <h2>اختر الشركة</h2>
+
+  <div class="brand-grid small">
+    <button class="brand-card" onclick="setBrand('هيونداي')">
+      <img src="assets/hyundai.png">
+      <strong>هيونداي</strong>
+    </button>
+
+    <button class="brand-card" onclick="setBrand('كيا')">
+      <img src="assets/kia.png">
+      <strong>كيا</strong>
+    </button>
+  </div>
+
+  <h3 id="selectedBrandText">لم يتم اختيار الشركة</h3>
+
+  <input id="code" placeholder="كود القطعة">
+  <input id="name" placeholder="اسم القطعة">
+  <input id="car" placeholder="نوع السيارة">
+  <input id="model" placeholder="الموديل">
+  <input id="price" placeholder="السعر">
+
+  <h3>الكميات حسب الفروع</h3>
+  <input id="nasim" type="number" placeholder="كمية فرع النسيم">
+  <input id="khaleej" type="number" placeholder="كمية فرع الخليج">
+  <input id="dammam1" type="number" placeholder="كمية الخضرية 1">
+  <input id="dammam2" type="number" placeholder="كمية الخضرية 2">
+
+  <button onclick="addPart()">إضافة القطعة</button>
+  <p id="addMsg"></p>
+</section>
+
+<script src="admin.js"></script>
+</body>
+</html>
