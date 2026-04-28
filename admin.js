@@ -61,6 +61,12 @@ async function addPart() {
   const data = await res.json();
 
   if (data.success) {
-    document.getElementById("addMsg").innerText = "تمت إضافة القطعة بنجاح ✅";
-  }
+    document.getElementById("addMsg").innerText =
+  `✅ تمت إضافة القطعة: ${part.name}
+الكود: ${part.code}
+الشركة: ${part.brand}
+النسيم: ${part.nasim}
+الخليج: ${part.khaleej}
+الخضرية 1: ${part.dammam1}
+الخضرية 2: ${part.dammam2}`;
 }
